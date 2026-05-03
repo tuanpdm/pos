@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - POS System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.1);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card.orange {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .stat-card.green {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .stat-card.blue {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .table-status {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .status-empty {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-occupied {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .btn-action {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/dashboard}">
+                <i class="bi bi-shop"></i> POS System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span class="navbar-text me-3">Welcome, <span sec:authentication="name"></span></span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row mt-5">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${totalOrders}">0</div>
+                    <div class="stat-label">
+                        <i class="bi bi-receipt"></i> Tổng Hóa đơn
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card orange">
+                    <div class="stat-value" th:text="${#numbers.formatCurrency(todayRevenue)}">0</div>
+                    <div class="stat-label">
+                        <i class="bi bi-coin"></i> Doanh thu hôm nay
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card green">
+                    <div class="stat-value" th:text="${occupiedTables}">0</div>
+                    <div class="stat-label">
+                        <i class="bi bi-table"></i> Bàn đang phục vụ
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card blue">
+                    <div class="stat-value" th:text="${emptyTables}">0</div>
+                    <div class="stat-label">
+                        <i class="bi bi-table"></i> Bàn trống
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-cart-check"></i> Bán hàng nhanh
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <a th:href="@{/order}" class="btn btn-primary w-100 mb-3">
+                            <i class="bi bi-plus-lg"></i> Tạo Hóa đơn mới
+                        </a>
+                        <p class="text-muted">Nhấn nút trên để bắt đầu tạo hóa đơn mới cho khách hàng</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-gear"></i> Quản trị
+                        </h5>
+                    </div>
+                    <div class="card-body" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/admin/products}" class="btn btn-info btn-sm w-100 mb-2">
+                            <i class="bi bi-box"></i> Quản lý Sản phẩm
+                        </a>
+                        <a th:href="@{/admin/users}" class="btn btn-info btn-sm w-100 mb-2">
+                            <i class="bi bi-people"></i> Quản lý Nhân viên
+                        </a>
+                        <a th:href="@{/admin/reports}" class="btn btn-info btn-sm w-100">
+                            <i class="bi bi-bar-chart"></i> Báo cáo
+                        </a>
+                    </div>
+                    <div class="card-body" sec:authorize="!hasRole('ROLE_ADMIN')">
+                        <p class="text-muted">Bạn không có quyền truy cập chức năng quản trị</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 mb-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-info-circle"></i> Hướng dẫn sử dụng
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6 class="text-primary">Nhân viên Thu ngân:</h6>
+                                <ul>
+                                    <li>Xem danh sách bàn và tình trạng bàn</li>
+                                    <li>Tạo hóa đơn mới cho khách</li>
+                                    <li>Thêm/bớt món ăn trong hóa đơn</li>
+                                    <li>Xử lý thanh toán</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-success">Chủ quán / Quản lý:</h6>
+                                <ul>
+                                    <li>Quản lý sản phẩm & danh mục</li>
+                                    <li>Quản lý tài khoản nhân viên</li>
+                                    <li>Quản lý bàn phục vụ</li>
+                                    <li>Xem báo cáo doanh thu</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-info">Hỗ trợ kỹ thuật:</h6>
+                                <ul>
+                                    <li>H2 Console: <a th:href="@{/h2-console}" target="_blank">Truy cập</a></li>
+                                    <li>Email: support@possystem.com</li>
+                                    <li>Phone: 0123-456-789</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
