@@ -1,215 +1,158 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - POS System</title>
+    <title>Thanh toán - POS System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/style.css}">
     <style>
-        .navbar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .checkout-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .checkout-card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .summary-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .summary-table th,
-        .summary-table td {
-            padding: 12px;
-            text-align: right;
-            border-bottom: 1px solid #e9ecef;
-        }
-        .summary-table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-        .summary-table td:first-child,
-        .summary-table th:first-child {
-            text-align: left;
-        }
-        .total-row {
-            font-size: 20px;
-            font-weight: bold;
-            background-color: #f8f9fa;
-        }
         .payment-method {
             display: inline-block;
-            padding: 15px;
-            margin: 10px;
+            padding: 16px 20px;
+            margin: 8px;
             border: 2px solid #e9ecef;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             text-align: center;
             min-width: 120px;
         }
-        .payment-method:hover {
-            border-color: #667eea;
-        }
+        .payment-method:hover { border-color: #667eea; }
         .payment-method.selected {
             background-color: #667eea;
             color: white;
             border-color: #667eea;
         }
-        .payment-method i {
-            display: block;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
+        .payment-method i { display: block; font-size: 28px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/dashboard}">
-                <i class="bi bi-shop"></i> POS System
-            </a>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/order/detail/{id}(id=${order.id})}">← Quay lại</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/logout}">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <nav th:replace="~{fragments/common :: navbar}" class="navbar navbar-expand-lg navbar-dark"></nav>
 
-    <div class="container mt-5 mb-5">
-        <div class="checkout-container">
-            <h2 class="mb-4">
-                <i class="bi bi-credit-card"></i> Thanh toán hóa đơn
-            </h2>
-
-            <!-- Order Summary -->
-            <div class="checkout-card">
-                <h5 class="mb-3">Chi tiết hóa đơn</h5>
-                <table class="summary-table">
-                    <thead>
-                        <tr>
-                            <th>Sản phẩm</th>
-                            <th>Số lượng</th>
-                            <th>Đơn giá</th>
-                            <th>Thành tiền</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="detail : ${details}">
-                            <td>
-                                <strong th:text="${detail.product.name}">Sản phẩm</strong><br>
-                                <small th:if="${detail.size}" th:text="'Size: ' + ${detail.size}" class="text-muted"></small>
-                                <small th:if="${detail.note}" th:text="'Ghi chú: ' + ${detail.note}" class="d-block text-muted"></small>
-                            </td>
-                            <td th:text="${detail.quantity}">1</td>
-                            <td th:text="${#numbers.formatCurrency(detail.unitPrice)}">0</td>
-                            <td th:text="${#numbers.formatCurrency(detail.unitPrice.multiply(detail.quantity))}">0</td>
-                        </tr>
-                    </tbody>
-                </table>
+    <div class="container mt-4 mb-5">
+        <div style="max-width: 760px; margin: 0 auto;">
+            <div class="d-flex align-items-center mb-4 gap-2">
+                <a th:href="@{/order/detail/{id}(id=${order.id})}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <h2 class="mb-0"><i class="bi bi-credit-card me-2"></i>Thanh toán hóa đơn</h2>
             </div>
 
-            <!-- Order Totals -->
-            <div class="checkout-card">
-                <h5 class="mb-3">Tính toán giá</h5>
-                <table class="summary-table">
-                    <tr>
-                        <td>Tạm tính:</td>
-                        <td th:text="${#numbers.formatCurrency(order.totalAmount)}">0</td>
-                    </tr>
-                    <tr th:if="${order.discountAmount.signum() > 0}">
-                        <td>Giảm giá:</td>
-                        <td style="color: #28a745;" th:text="'-' + ${#numbers.formatCurrency(order.discountAmount)}">-0</td>
-                    </tr>
-                    <tr th:if="${order.vatRate.signum() > 0}">
-                        <td>VAT (<span th:text="${order.vatRate}">0</span>%):</td>
-                        <td th:text="${#numbers.formatCurrency(order.totalAmount.multiply(order.vatRate).divide(100))}">0</td>
-                    </tr>
-                    <tr class="total-row">
-                        <td>TỔNG CỘNG:</td>
-                        <td style="color: #667eea;">
-                            <i class="bi bi-currency-dollar"></i>
-                            <span th:text="${#numbers.formatCurrency(order.totalAmount)}">0</span>
-                        </td>
-                    </tr>
-                </table>
+            <!-- Table info banner -->
+            <div class="alert alert-info py-2 mb-3">
+                <i class="bi bi-table me-1"></i>
+                Bàn: <strong th:text="${order.table.name}">Bàn 1</strong>
+                &nbsp;|&nbsp;
+                <i class="bi bi-person me-1"></i>
+                <span th:text="${order.user.fullName}">Nhân viên</span>
             </div>
 
-            <!-- Payment Method -->
-            <div class="checkout-card">
-                <h5 class="mb-3">Phương thức thanh toán</h5>
-                <form id="paymentForm" th:action="@{/order/checkout/{id}/pay(id=${order.id})}" method="post">
-                    <div class="text-center">
-                        <label>
-                            <div class="payment-method" onclick="selectPaymentMethod(this, 'CASH')">
-                                <i class="bi bi-cash-coin"></i>
-                                Tiền mặt
-                            </div>
-                            <input type="radio" name="paymentMethod" value="CASH" style="display: none;" checked>
-                        </label>
+            <!-- Order detail -->
+            <div class="card mb-3">
+                <div class="card-header"><h6 class="mb-0">Chi tiết món gọi</h6></div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th class="text-center">SL</th>
+                                <th class="text-end">Đơn giá</th>
+                                <th class="text-end">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="detail : ${details}">
+                                <td>
+                                    <strong th:text="${detail.product.name}">Sản phẩm</strong>
+                                    <small th:if="${detail.size}" th:text="' · Size ' + ${detail.size}" class="text-muted"></small>
+                                    <small th:if="${detail.note}" class="d-block text-muted" th:text="'Ghi chú: ' + ${detail.note}"></small>
+                                </td>
+                                <td class="text-center" th:text="${detail.quantity}">1</td>
+                                <td class="text-end" th:text="${#numbers.formatCurrency(detail.unitPrice)}">0</td>
+                                <td class="text-end fw-semibold"
+                                    th:text="${#numbers.formatCurrency(detail.unitPrice.multiply(detail.quantity))}">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                        <label>
-                            <div class="payment-method" onclick="selectPaymentMethod(this, 'BANK_TRANSFER')">
-                                <i class="bi bi-bank"></i>
-                                Chuyển khoản
-                            </div>
-                            <input type="radio" name="paymentMethod" value="BANK_TRANSFER" style="display: none;">
-                        </label>
-
-                        <label>
-                            <div class="payment-method" onclick="selectPaymentMethod(this, 'QR_CODE')">
-                                <i class="bi bi-qr-code"></i>
-                                Quét mã QR
-                            </div>
-                            <input type="radio" name="paymentMethod" value="QR_CODE" style="display: none;">
-                        </label>
+            <!-- Totals -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tạm tính:</span>
+                        <span th:text="${#numbers.formatCurrency(order.totalAmount)}">0</span>
                     </div>
-
-                    <div class="mt-4 d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg">
-                            <i class="bi bi-check-circle"></i> Xác nhận thanh toán
-                        </button>
-                        <a th:href="@{/order/detail/{id}(id=${order.id})}" class="btn btn-secondary">
-                            Hủy
-                        </a>
+                    <div class="d-flex justify-content-between mb-2 text-success" th:if="${order.discountAmount.signum() > 0}">
+                        <span>Giảm giá:</span>
+                        <span th:text="'-' + ${#numbers.formatCurrency(order.discountAmount)}">0</span>
                     </div>
-                </form>
+                    <div class="d-flex justify-content-between mb-2" th:if="${order.vatRate.signum() > 0}">
+                        <span>VAT (<span th:text="${order.vatRate}">0</span>%):</span>
+                        <span th:text="${#numbers.formatCurrency(order.totalAmount.multiply(order.vatRate).divide(100))}">0</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold fs-5">TỔNG CỘNG:</span>
+                        <span class="fw-bold fs-4 text-primary">
+                            <i class="bi bi-cash-stack me-1"></i>
+                            <span th:text="${#numbers.formatCurrency(order.finalAmount)}">0</span>
+                        </span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Table Info -->
-            <div class="checkout-card text-center">
-                <p class="text-muted mb-0">
-                    <i class="bi bi-table"></i>
-                    Bàn: <strong th:text="${order.table.name}">Bàn 1</strong>
-                </p>
+            <!-- Payment method -->
+            <div class="card mb-3">
+                <div class="card-header"><h6 class="mb-0">Phương thức thanh toán</h6></div>
+                <div class="card-body">
+                    <form id="paymentForm" th:action="@{/order/checkout/{id}/pay(id=${order.id})}" method="post">
+                        <div class="text-center mb-4">
+                            <label>
+                                <div class="payment-method selected" onclick="selectPayment(this, 'CASH')">
+                                    <i class="bi bi-cash-coin"></i>Tiền mặt
+                                </div>
+                                <input type="radio" name="paymentMethod" value="CASH" checked style="display:none;">
+                            </label>
+                            <label>
+                                <div class="payment-method" onclick="selectPayment(this, 'BANK_TRANSFER')">
+                                    <i class="bi bi-bank"></i>Chuyển khoản
+                                </div>
+                                <input type="radio" name="paymentMethod" value="BANK_TRANSFER" style="display:none;">
+                            </label>
+                            <label>
+                                <div class="payment-method" onclick="selectPayment(this, 'QR_CODE')">
+                                    <i class="bi bi-qr-code"></i>Quét QR
+                                </div>
+                                <input type="radio" name="paymentMethod" value="QR_CODE" style="display:none;">
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle me-1"></i> Xác nhận thanh toán
+                            </button>
+                            <a th:href="@{/order/detail/{id}(id=${order.id})}" class="btn btn-outline-secondary">
+                                Quay lại
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function selectPaymentMethod(element, method) {
-            document.querySelectorAll('.payment-method').forEach(el => {
-                el.classList.remove('selected');
-            });
-            element.classList.add('selected');
-            element.parentElement.querySelector('input[type="radio"]').checked = true;
+        function selectPayment(el, method) {
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+            el.classList.add('selected');
+            el.parentElement.querySelector('input[type="radio"]').checked = true;
         }
-
-        // Set initial selected payment method
-        document.querySelector('.payment-method').classList.add('selected');
     </script>
 </body>
 </html>
-

@@ -35,6 +35,23 @@ public class OrderController {
         return "order-list";
     }
 
+    @PostMapping("/quick-create/{tableId}")
+    public String quickCreateOrder(@PathVariable Long tableId, Principal principal, RedirectAttributes redirect) {
+        PosTable table = posTableService.getTableById(tableId)
+                .orElseThrow(() -> new RuntimeException("Table not found"));
+        User user = userService.getUserByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Order order = new Order();
+        order.setTable(table);
+        order.setUser(user);
+        Order saved = orderService.createOrder(order);
+        posTableService.updateTableStatus(tableId, "OCCUPIED");
+
+        redirect.addAttribute("orderId", saved.getId());
+        return "redirect:/order/detail/{orderId}";
+    }
+
     @GetMapping("/new/{tableId}")
     public String newOrder(@PathVariable Long tableId, Model model) {
         PosTable table = posTableService.getTableById(tableId)

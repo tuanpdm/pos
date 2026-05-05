@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Entity
@@ -48,5 +49,10 @@ public class Order {
 
     @Column
     private String notes;
+
+    public BigDecimal getFinalAmount() {
+        BigDecimal vatAmount = totalAmount.multiply(vatRate).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        return totalAmount.subtract(discountAmount).add(vatAmount);
+    }
 }
 
