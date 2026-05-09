@@ -55,6 +55,10 @@
                                         </span>
                                     </td>
                                     <td>
+                                        <a th:href="@{/admin/tables/{id}/edit(id=${table.id})}"
+                                           class="btn btn-sm btn-outline-primary" title="Chỉnh sửa">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
                                         <form th:action="@{/admin/tables/{id}/delete(id=${table.id})}"
                                               method="post" class="d-inline"
                                               onsubmit="return confirm('Xóa bàn này?')">

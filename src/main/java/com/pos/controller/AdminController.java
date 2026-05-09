@@ -175,6 +175,21 @@ public class AdminController {
         return "redirect:/admin/tables";
     }
 
+    @GetMapping("/tables/{id}/edit")
+    public String editTable(@PathVariable Long id, Model model) {
+        PosTable table = posTableService.getTableById(id)
+                .orElseThrow(() -> new RuntimeException("Table not found"));
+        model.addAttribute("table", table);
+        return "admin-table-form";
+    }
+
+    @PostMapping("/tables/{id}/update")
+    public String updateTable(@PathVariable Long id, @ModelAttribute PosTable table, RedirectAttributes redirect) {
+        posTableService.updateTable(id, table);
+        redirect.addFlashAttribute("message", "Table updated successfully");
+        return "redirect:/admin/tables";
+    }
+
     @PostMapping("/tables/{id}/delete")
     public String deleteTable(@PathVariable Long id, RedirectAttributes redirect) {
         posTableService.deleteTable(id);
