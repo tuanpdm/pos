@@ -13,7 +13,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByTableId(Long tableId);
     List<Order> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
     List<Order> findByStatusAndCreatedAtBetween(String status, LocalDateTime start, LocalDateTime end);
-    
-    // Find the most recent pending order for a specific table
     Optional<Order> findFirstByTableIdAndStatusOrderByCreatedAtDesc(Long tableId, String status);
 }

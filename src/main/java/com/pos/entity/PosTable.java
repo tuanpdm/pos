@@ -19,7 +19,7 @@ public class PosTable {
     private String name;
 
     @Column(nullable = false)
-    private String status = "EMPTY";  // EMPTY, OCCUPIED, RESERVED
+    private String status = "EMPTY";
 
     @Column
     private String description;

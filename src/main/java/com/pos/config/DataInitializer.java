@@ -30,7 +30,6 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Initialize Roles
         if (roleRepository.findByName("ROLE_ADMIN") == null) {
             Role adminRole = new Role();
             adminRole.setName("ROLE_ADMIN");
@@ -41,7 +40,6 @@ public class DataInitializer implements CommandLineRunner {
             roleRepository.save(cashierRole);
         }
 
-        // Initialize Admin User
         if (userRepository.findByUsername("admin").isEmpty()) {
             User admin = new User();
             admin.setUsername("admin");
@@ -60,7 +58,6 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(cashier);
         }
 
-        // Initialize Categories
         if (categoryRepository.findAll().isEmpty()) {
             String[] categoryNames = {"Cà phê", "Trà sữa", "Nước ép", "Bánh ngọt", "Đồ ăn nhẹ"};
             for (String name : categoryNames) {
@@ -70,13 +67,11 @@ public class DataInitializer implements CommandLineRunner {
             }
         }
 
-        // Initialize Products
         if (productRepository.findAll().isEmpty()) {
             Category coffeeCategory = categoryRepository.findByName("Cà phê");
             Category teaCategory = categoryRepository.findByName("Trà sữa");
             Category juiceCategory = categoryRepository.findByName("Nước ép");
 
-            // Coffee products
             Product espresso = new Product();
             espresso.setCategory(coffeeCategory);
             espresso.setName("Espresso");
@@ -101,7 +96,6 @@ public class DataInitializer implements CommandLineRunner {
             cappuccino.setDescription("Cappuccino với sua tuoi");
             productRepository.save(cappuccino);
 
-            // Tea products
             Product milkTea = new Product();
             milkTea.setCategory(teaCategory);
             milkTea.setName("Trà sữa thái");
@@ -110,7 +104,6 @@ public class DataInitializer implements CommandLineRunner {
             milkTea.setDescription("Trà sữa thái ngon");
             productRepository.save(milkTea);
 
-            // Juice products
             Product orangeJuice = new Product();
             orangeJuice.setCategory(juiceCategory);
             orangeJuice.setName("Nước cam");
@@ -120,7 +113,6 @@ public class DataInitializer implements CommandLineRunner {
             productRepository.save(orangeJuice);
         }
 
-        // Initialize Tables
         if (posTableRepository.findAll().isEmpty()) {
             for (int i = 1; i <= 10; i++) {
                 PosTable table = new PosTable();

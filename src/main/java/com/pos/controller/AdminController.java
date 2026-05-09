@@ -34,7 +34,6 @@ public class AdminController {
     @Autowired
     private RoleRepository roleRepository;
 
-    // Product Management
     @GetMapping("/products")
     public String productList(Model model) {
         model.addAttribute("products", productService.getAllProducts());
@@ -86,7 +85,6 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
-    // Category Management
     @GetMapping("/categories")
     public String categoryList(Model model) {
         model.addAttribute("categories", categoryService.getAllCategories());
@@ -115,7 +113,6 @@ public class AdminController {
         return "redirect:/admin/categories";
     }
 
-    // User Management
     @GetMapping("/users")
     public String userList(Model model) {
         model.addAttribute("users", userService.getAllUsers());
@@ -159,7 +156,6 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
-    // Table Management
     @GetMapping("/tables")
     public String tableList(Model model) {
         model.addAttribute("tables", posTableService.getAllTables());
@@ -186,7 +182,6 @@ public class AdminController {
         return "redirect:/admin/tables";
     }
 
-    // Reports
     @GetMapping("/reports")
     public String reports(Model model) {
         LocalDate today = LocalDate.now();

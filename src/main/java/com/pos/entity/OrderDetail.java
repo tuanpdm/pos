@@ -28,7 +28,7 @@ public class OrderDetail {
     private Integer quantity;
 
     @Column
-    private String size;  // S, M, L
+    private String size;
 
     @Column
     private String note;

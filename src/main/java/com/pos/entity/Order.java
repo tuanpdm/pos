@@ -30,7 +30,7 @@ public class Order {
     private BigDecimal totalAmount = BigDecimal.ZERO;
 
     @Column(nullable = false)
-    private String status = "PENDING";  // PENDING, PAID, CANCELLED
+    private String status = "PENDING";
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -39,7 +39,7 @@ public class Order {
     private LocalDateTime paidAt;
 
     @Column(name = "payment_method")
-    private String paymentMethod;  // CASH, BANK_TRANSFER, QR_CODE
+    private String paymentMethod;
 
     @Column(name = "vat_rate")
     private BigDecimal vatRate = BigDecimal.ZERO;

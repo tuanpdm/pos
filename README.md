@@ -1,84 +1,84 @@
-# POS System - Spring Boot Application
+# Hệ Thống POS - Ứng Dụng Spring Boot
 
-A complete Point of Sale (POS) system for managing coffee shop operations built with Spring Boot, Thymeleaf, Bootstrap, and H2 Database.
+Hệ thống Điểm Bán Hàng (POS) hoàn chỉnh để quản lý hoạt động quán cà phê, được xây dựng bằng Spring Boot, Thymeleaf, Bootstrap và H2 Database.
 
-## 🎯 Features
+## 🎯 Tính Năng
 
-### For Cashier (Sales Staff)
-- **Order Management**: View product menu organized by categories
-- **Customize Items**: Select sizes (S, M, L), add notes (toppings, sugar level, ice amount)
-- **Table Management**: View table status (Empty, Occupied, Reserved)
-- **Quick Checkout**: Calculate totals with VAT and discounts
-- **Payment Methods**: Support for cash, bank transfer, and QR code
-- **Receipt Printing**: Print or export invoices
+### Dành Cho Thu Ngân (Nhân Viên Bán Hàng)
+- **Quản Lý Đơn Hàng**: Xem menu sản phẩm được phân theo danh mục
+- **Tùy Chỉnh Món**: Chọn kích cỡ (S, M, L), thêm ghi chú (topping, lượng đường, lượng đá)
+- **Quản Lý Bàn**: Xem trạng thái bàn (Trống, Có khách, Đã đặt)
+- **Thanh Toán Nhanh**: Tính tổng tiền với VAT và giảm giá
+- **Phương Thức Thanh Toán**: Hỗ trợ tiền mặt, chuyển khoản và mã QR
+- **In Hóa Đơn**: In hoặc xuất hóa đơn
 
-### For Admin/Manager
-- **Product Management**: Add, edit, delete products with images and descriptions
-- **Category Management**: Organize products into categories
-- **User/Staff Management**: Create accounts with role-based access control
-- **Table Management**: Configure and manage service tables
-- **Revenue Reports**: Daily, weekly, monthly sales analytics
-- **Best-sellers Report**: Track most popular items
+### Dành Cho Admin/Quản Lý
+- **Quản Lý Sản Phẩm**: Thêm, sửa, xóa sản phẩm kèm hình ảnh và mô tả
+- **Quản Lý Danh Mục**: Phân loại sản phẩm theo danh mục
+- **Quản Lý Nhân Viên**: Tạo tài khoản với phân quyền theo vai trò
+- **Quản Lý Bàn**: Cấu hình và quản lý bàn phục vụ
+- **Báo Cáo Doanh Thu**: Thống kê doanh số theo ngày, tuần, tháng
+- **Báo Cáo Bán Chạy**: Theo dõi các món phổ biến nhất
 
-## 🛠️ Technology Stack
+## 🛠️ Công Nghệ Sử Dụng
 
 - **Backend**: Spring Boot 3.2.0
 - **Frontend**: Thymeleaf + Bootstrap 5
-- **Database**: H2 (in-memory)
-- **Security**: Spring Security with BCrypt password encoding
-- **Build Tool**: Maven
+- **Cơ sở dữ liệu**: H2 (in-memory)
+- **Bảo mật**: Spring Security với mã hóa mật khẩu BCrypt
+- **Công cụ build**: Maven
 
-## 📋 Prerequisites
+## 📋 Yêu Cầu Hệ Thống
 
-- Java 17 or higher
+- Java 17 trở lên
 - Maven 3.6+
-- Internet connection (for Maven dependencies)
+- Kết nối internet (để tải các dependency của Maven)
 
-## 🚀 Installation & Running
+## 🚀 Cài Đặt & Chạy Ứng Dụng
 
-### 1. Clone the repository
+### 1. Di chuyển đến thư mục dự án
 ```bash
 cd G:\Workspace\pos2
 ```
 
-### 2. Build the project
+### 2. Build dự án
 ```bash
 mvn clean install
 ```
 
-### 3. Run the application
+### 3. Chạy ứng dụng
 ```bash
 mvn spring-boot:run
 ```
 
-Or if you have the JAR built:
+Hoặc nếu đã build file JAR:
 ```bash
 java -jar target/pos-system-1.0.0.jar
 ```
 
-### 4. Access the application
+### 4. Truy cập ứng dụng
 
-Open your browser and navigate to:
-- **Main Application**: http://localhost:8080
+Mở trình duyệt và truy cập:
+- **Ứng dụng chính**: http://localhost:8080
 - **H2 Database Console**: http://localhost:8080/h2-console
 
-## 📝 Default Login Credentials
+## 📝 Thông Tin Đăng Nhập Mặc Định
 
-### Admin Account
-- **Username**: admin
-- **Password**: admin123
+### Tài Khoản Admin
+- **Tên đăng nhập**: admin
+- **Mật khẩu**: admin123
 
-### Cashier Account
-- **Username**: cashier
-- **Password**: cashier123
+### Tài Khoản Thu Ngân
+- **Tên đăng nhập**: cashier
+- **Mật khẩu**: cashier123
 
-## 📁 Project Structure
+## 📁 Cấu Trúc Dự Án
 
 ```
 pos2/
 ├── src/main/java/com/pos/
-│   ├── PosApplication.java                    # Main application class
-│   ├── entity/                                # JPA Entity classes
+│   ├── PosApplication.java                    # Lớp khởi động ứng dụng
+│   ├── entity/                                # Các lớp JPA Entity
 │   │   ├── Role.java
 │   │   ├── User.java
 │   │   ├── Category.java
@@ -87,15 +87,15 @@ pos2/
 │   │   ├── Order.java
 │   │   └── OrderDetail.java
 │   ├── repository/                            # Spring Data JPA Repositories
-│   ├── service/                               # Business logic services
-│   ├── controller/                            # MVC Controllers
-│   ├── config/                                # Configuration classes
+│   ├── service/                               # Các lớp xử lý nghiệp vụ
+│   ├── controller/                            # Các MVC Controller
+│   ├── config/                                # Các lớp cấu hình
 │   │   ├── SecurityConfig.java
 │   │   ├── UserDetailsServiceImpl.java
 │   │   └── DataInitializer.java
-│   └── dto/                                   # Data Transfer Objects (if needed)
+│   └── dto/                                   # Các đối tượng truyền dữ liệu (nếu cần)
 ├── src/main/resources/
-│   ├── templates/                             # Thymeleaf templates
+│   ├── templates/                             # Các template Thymeleaf
 │   │   ├── layout.html
 │   │   ├── dashboard.html
 │   │   ├── login.html
@@ -113,144 +113,143 @@ pos2/
 │   ├── static/
 │   │   ├── css/
 │   │   └── js/
-│   ├── application.yml                        # Configuration
-│   └── data.sql                               # Initial data (optional)
-├── pom.xml                                    # Maven dependencies
-└── README.md                                  # This file
+│   ├── application.yml                        # Tệp cấu hình
+│   └── data.sql                               # Dữ liệu khởi tạo (tùy chọn)
+├── pom.xml                                    # Các dependency Maven
+└── README.md                                  # Tệp này
 ```
 
-## 📊 Database Schema
+## 📊 Cấu Trúc Cơ Sở Dữ Liệu
 
-### Tables
-- **roles**: User roles (ADMIN, CASHIER)
-- **users**: System users/staff
-- **categories**: Product categories
-- **products**: Menu items
-- **tables**: Service tables
-- **orders**: Sales invoices
-- **order_details**: Order line items
+### Các Bảng
+- **roles**: Vai trò người dùng (ADMIN, CASHIER)
+- **users**: Người dùng/nhân viên trong hệ thống
+- **categories**: Danh mục sản phẩm
+- **products**: Các món trong thực đơn
+- **tables**: Bàn phục vụ
+- **orders**: Hóa đơn bán hàng
+- **order_details**: Chi tiết từng dòng trong đơn hàng
 
-## 🔐 Security Features
+## 🔐 Tính Năng Bảo Mật
 
-- **Role-Based Access Control (RBAC)**:
-    - ADMIN: Full system access
-    - CASHIER: Only order and sale point access
+- **Phân Quyền Theo Vai Trò (RBAC)**:
+    - ADMIN: Toàn quyền truy cập hệ thống
+    - CASHIER: Chỉ truy cập phần đặt hàng và bán hàng
 
-- **Password Security**: BCrypt encryption with salt
+- **Bảo Mật Mật Khẩu**: Mã hóa BCrypt có salt
 
-- **Session Management**: Automatic logout for inactive users
+- **Quản Lý Phiên**: Tự động đăng xuất khi không hoạt động
 
-- **Database Security**: H2 Console access secured
+- **Bảo Mật Cơ Sở Dữ Liệu**: Bảo vệ quyền truy cập H2 Console
 
-## 🎨 UI/UX Highlights
+## 🎨 Điểm Nổi Bật UI/UX
 
-- Responsive design for desktop and tablets
-- Bootstrap 5 components
-- Real-time order updates
-- Intuitive table selection interface
-- Color-coded status indicators
-- Fast loading times
+- Giao diện responsive cho máy tính và máy tính bảng
+- Các thành phần Bootstrap 5
+- Cập nhật đơn hàng theo thời gian thực
+- Giao diện chọn bàn trực quan
+- Chỉ báo trạng thái bằng màu sắc
+- Thời gian tải nhanh
 
-## 🔧 Main Endpoints
+## 🔧 Các Endpoint Chính
 
-### Public
-- `GET /` → Dashboard
-- `GET /login` → Login page
-- `GET /register` → Registration page
+### Công Khai
+- `GET /` → Trang chủ
+- `GET /login` → Trang đăng nhập
+- `GET /register` → Trang đăng ký
 - `GET /h2-console` → H2 Database console
 
-### Cashier Routes
-- `GET /dashboard` → Dashboard
-- `GET /order` → Order list and table selection
-- `GET /order/new/{tableId}` → Create new order
-- `GET /order/detail/{orderId}` → Order detail editing
-- `GET /order/checkout/{orderId}` → Checkout page
-- `POST /order/checkout/{orderId}/pay` → Process payment
+### Đường Dẫn Thu Ngân
+- `GET /dashboard` → Trang chủ
+- `GET /order` → Danh sách đơn hàng và chọn bàn
+- `GET /order/new/{tableId}` → Tạo đơn hàng mới
+- `GET /order/detail/{orderId}` → Chỉnh sửa chi tiết đơn hàng
+- `GET /order/checkout/{orderId}` → Trang thanh toán
+- `POST /order/checkout/{orderId}/pay` → Xử lý thanh toán
 
-### Admin Routes
-- `GET /admin/products` → Product management
-- `GET /admin/categories` → Category management
-- `GET /admin/users` → User management
-- `GET /admin/tables` → Table management
-- `GET /admin/reports` → Revenue reports
+### Đường Dẫn Admin
+- `GET /admin/products` → Quản lý sản phẩm
+- `GET /admin/categories` → Quản lý danh mục
+- `GET /admin/users` → Quản lý người dùng
+- `GET /admin/tables` → Quản lý bàn
+- `GET /admin/reports` → Báo cáo doanh thu
 
-## 💾 Sample Data
+## 💾 Dữ Liệu Mẫu
 
-The application auto-initializes with demo data on first run:
+Ứng dụng tự động khởi tạo dữ liệu demo khi chạy lần đầu:
 
-### Categories
+### Danh Mục
 - Cà phê (Coffee)
 - Trà sữa (Milk Tea)
 - Nước ép (Juice)
 - Bánh ngọt (Pastries)
 - Đồ ăn nhẹ (Snacks)
 
-### Products
-- Espresso: 25,000 VND
-- Americano: 30,000 VND
-- Cappuccino: 40,000 VND
-- Milk Tea: 35,000 VND
-- Orange Juice: 25,000 VND
+### Sản Phẩm
+- Espresso: 25.000 VND
+- Americano: 30.000 VND
+- Cappuccino: 40.000 VND
+- Trà sữa: 35.000 VND
+- Nước cam: 25.000 VND
 
-### Tables
-10 tables (Bàn 1 - Bàn 10)
+### Bàn
+10 bàn (Bàn 1 - Bàn 10)
 
-## 🐛 Troubleshooting
+## 🐛 Xử Lý Sự Cố
 
-### Port already in use
+### Cổng đã được sử dụng
 ```bash
-# Change port in application.yml
+# Thay đổi cổng trong application.yml
 server:
   port: 8081
 ```
 
-### H2 Console not accessible
-- Check browser allows cookies
-- Verify URL: http://localhost:8080/h2-console
+### Không truy cập được H2 Console
+- Kiểm tra trình duyệt cho phép cookie
+- Xác minh URL: http://localhost:8080/h2-console
 - JDBC URL: `jdbc:h2:mem:posdb`
 
-### Cannot login
-- Clear browser cache and cookies
-- Verify credentials in DataInitializer.java
-- Check user status in database
+### Không thể đăng nhập
+- Xóa cache và cookie của trình duyệt
+- Kiểm tra thông tin đăng nhập trong DataInitializer.java
+- Kiểm tra trạng thái người dùng trong cơ sở dữ liệu
 
-## 📈 Future Enhancements
+## 📈 Tính Năng Dự Kiến
 
-- [ ] Inventory management
-- [ ] Customer loyalty program
-- [ ] Staff performance analytics
-- [ ] Multi-location support
-- [ ] Mobile app (React Native)
-- [ ] Real-time notifications
-- [ ] Order queueing system
-- [ ] Advanced analytics dashboard
+- [ ] Quản lý kho hàng
+- [ ] Chương trình khách hàng thân thiết
+- [ ] Phân tích hiệu suất nhân viên
+- [ ] Hỗ trợ đa chi nhánh
+- [ ] Ứng dụng di động (React Native)
+- [ ] Thông báo thời gian thực
+- [ ] Hệ thống hàng đợi đơn hàng
+- [ ] Dashboard phân tích nâng cao
 
-## 📄 License
+## 📄 Giấy Phép
 
-This project is open source and available under the MIT License.
+Dự án này là mã nguồn mở và có sẵn theo Giấy phép MIT.
 
-## 👥 Support
+## 👥 Hỗ Trợ
 
-For questions or issues, please contact:
+Nếu có câu hỏi hoặc vấn đề, vui lòng liên hệ:
 - Email: support@possystem.com
-- Phone: 0123-456-789
+- Điện thoại: 0123-456-789
 
-## 📚 Resources
+## 📚 Tài Nguyên Tham Khảo
 
-- [Spring Boot Documentation](https://spring.io/projects/spring-boot)
-- [Thymeleaf Documentation](https://www.thymeleaf.org/)
-- [Bootstrap Documentation](https://getbootstrap.com/)
-- [Spring Security Documentation](https://spring.io/projects/spring-security)
+- [Tài liệu Spring Boot](https://spring.io/projects/spring-boot)
+- [Tài liệu Thymeleaf](https://www.thymeleaf.org/)
+- [Tài liệu Bootstrap](https://getbootstrap.com/)
+- [Tài liệu Spring Security](https://spring.io/projects/spring-security)
 - [H2 Database](https://www.h2database.com/)
 
 ---
 
-**Version**: 1.0.0  
-**Last Updated**: March 2025  
-**Developed for**: Coffee Shop POS Management
+**Phiên bản**: 1.0.0  
+**Cập nhật lần cuối**: Tháng 3 năm 2025  
+**Phát triển cho**: Quản Lý POS Quán Cà Phê
 
 ```
-Note: This is a development version using in-memory H2 database.
-For production, configure a persistent database (MySQL, PostgreSQL, etc.)
+Lưu ý: Đây là phiên bản phát triển sử dụng H2 database in-memory.
+Để triển khai thực tế, hãy cấu hình cơ sở dữ liệu lưu trữ lâu dài (MySQL, PostgreSQL, v.v.)
 ```
-

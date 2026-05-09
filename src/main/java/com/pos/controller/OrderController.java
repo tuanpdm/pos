@@ -75,14 +75,12 @@ public class OrderController {
         order.setUser(user);
         Order saved = orderService.createOrder(order);
 
-        // Update table status
         posTableService.updateTableStatus(order.getTable().getId(), "OCCUPIED");
 
         redirect.addAttribute("orderId", saved.getId());
         return "redirect:/order/detail/{orderId}";
     }
 
-    // New intermediate route to find the active order for a table
     @GetMapping("/active/{tableId}")
     public String getActiveOrder(@PathVariable Long tableId, RedirectAttributes redirect) {
         Optional<Order> activeOrder = orderService.getActiveOrderByTable(tableId);
@@ -91,7 +89,6 @@ public class OrderController {
             redirect.addAttribute("orderId", activeOrder.get().getId());
             return "redirect:/order/detail/{orderId}";
         } else {
-            // Fallback: If somehow occupied but no pending order, go create a new one
             return "redirect:/order/new/" + tableId;
         }
     }
@@ -166,7 +163,6 @@ public class OrderController {
                      RedirectAttributes redirect) {
         Order order = orderService.payOrder(orderId, paymentMethod);
 
-        // Update table status
         posTableService.updateTableStatus(order.getTable().getId(), "EMPTY");
 
         redirect.addAttribute("orderId", orderId);
